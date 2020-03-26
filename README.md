@@ -22,7 +22,7 @@ cd "virtual env name"
 
 pip3 install -r requirements.txt
 
-3. Execute the script
+## Execute the script
 
 python3 test.py
 
