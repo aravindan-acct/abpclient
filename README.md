@@ -14,17 +14,21 @@ Use this tool for demo purposes only. its quite useful for:
 
 1. Create a python3 virtual environment and pull in the script into the environment. To create a virtual env:
 
-python3 -m venv "virtual env name"
+	```python3 -m venv "virtual env name"```
 
-cd "virtual env name"
+	```cd "virtual env name"```
 
-2. Install the required python3 modules from the requirements file
+2. Activate the Python Virtual Environment
 
-pip3 install -r requirements.txt
+	```source bin/activate```
+
+3. Install the required python3 modules from the requirements file
+
+	```pip3 install -r requirements.txt```
 
 ## Execute the script
 
-python3 test.py
+	```python3 test.py```
 
 
 
