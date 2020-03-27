@@ -1,11 +1,9 @@
 #! /usr/bin/python3
 
 import requests
-import scrapy
 from bs4 import BeautifulSoup
 import re
 import os
-from scrapy_client import BlogSpider
 import json
 import getpass
 from http_basic_auth import generate_header, parse_header
@@ -71,9 +69,9 @@ def simple_get(web_app_url):
     for i in range (0,10):
         try:
             print(f"URL : { web_app_url } ")
-            new_request=r.get(web_app_url)
+            new_request=r.get(web_app_url, verify=False)
             if new_request.status_code == 200:
-                print(f"{i} The request is successful: {new_request.status_code} and the response time is { new_request.elapsed.total_seconds()}")
+                print(f"{i} The request is successful: ,{new_request.status_code} and the response time is { new_request.elapsed.total_seconds()}")
                 total_req.insert(0,"ok")
                 total_req.insert(0,new_request.elapsed.total_seconds())  
             else:
@@ -136,7 +134,7 @@ def tarpit_test(web_app_url):
 def crawler_func(web_app_url):
     start_url=input("What is the start URL: ")
     crawl_url=web_app_url+start_url
-    response=requests.get(crawl_url)
+    response=requests.get(crawl_url, verify=False)
     page_html=response.text
     soup=BeautifulSoup(page_html,'lxml')
     hrefs=soup.findAll('a')
@@ -153,7 +151,7 @@ def recursive_crawler(web_app_url):
     ''')
     for url in list_of_urls:
         try:
-            response=requests.get(web_app_url+url, timeout=5)
+            response=requests.get(web_app_url+url, verify=False, timeout=5 )
         except:
             print(f"Error saving { url }")
             pass
@@ -170,7 +168,7 @@ def cred_tester(web_app_url):
     url_space=input("Enter the URI Space for the credential test, for example, cgi-bin/login.cgi :  ")
     complete_url=web_app_url+url_space
     print(f"Checking the parameters for the URL: {complete_url}")
-    response=requests.get(complete_url)
+    response=requests.get(complete_url, verify=False)
     page_html=response.text
     soup=BeautifulSoup(page_html, 'lxml')
     input_params=soup.find_all('input')
