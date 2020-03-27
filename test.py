@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 
 import requests
+import requests.packages.urllib3
 from bs4 import BeautifulSoup
 import re
 import os
@@ -65,6 +66,7 @@ def define_web_app():
 
 def simple_get(web_app_url):
     r=requests
+    requests.packages.urllib3.disable_warnings()
     total_req=list()
     for i in range (0,10):
         try:
@@ -77,7 +79,7 @@ def simple_get(web_app_url):
             else:
                 print(f"{i} The request was not successful: {new_request.status_code} and the response time is { new_request.elapsed.total_seconds()}")
                 total_req.insert(0,"request failed")
-                total_req.insert(0,new_request.elapsed.total_seconds())
+                total_req.insert(0,float(new_request.elapsed.total_seconds()))
         except:
             print(f"Connection failed\n")
             result="conn failed"
@@ -116,24 +118,22 @@ def tarpit_test(web_app_url):
             else:
                 stats.append(i)
         return stats
-    removenesting(data1)
+    stats=removenesting(data1)
     print(f"Successful Requests: {stats.count('ok')}")
     print(f"Failed Requests: {stats.count('request failed')}")
     print(f"Connections dropped: {stats.count('conn failed')}")
-    for _ in stats:
-        if 'ok' in stats:
-            stats.remove('ok')
-        elif 'request failed' in stats:
-            stats.remove('request failed')
-        elif 'conn failed' in stats:
-            stats.remove('conn failed')
-    print(f"Avg Response Time for the requests: { mean(stats)} seconds ")
+    finding_mean=list()
+    for i in stats:
+        if type(i) == float:
+            finding_mean.insert(0,i)
+    print(f"Avg Response Time for the requests: { mean(finding_mean)} seconds ")
 
             
 
 def crawler_func(web_app_url):
     start_url=input("What is the start URL: ")
     crawl_url=web_app_url+start_url
+    requests.packages.urllib3.disable_warnings()
     response=requests.get(crawl_url, verify=False)
     page_html=response.text
     soup=BeautifulSoup(page_html,'lxml')
@@ -149,6 +149,7 @@ def recursive_crawler(web_app_url):
     print(f'''Index of the crawled URL Space: \n
     {list_of_urls}
     ''')
+    requests.packages.urllib3.disable_warnings()
     for url in list_of_urls:
         try:
             response=requests.get(web_app_url+url, verify=False, timeout=5 )
@@ -168,6 +169,7 @@ def cred_tester(web_app_url):
     url_space=input("Enter the URI Space for the credential test, for example, cgi-bin/login.cgi :  ")
     complete_url=web_app_url+url_space
     print(f"Checking the parameters for the URL: {complete_url}")
+    requests.packages.urllib3.disable_warnings()
     response=requests.get(complete_url, verify=False)
     page_html=response.text
     soup=BeautifulSoup(page_html, 'lxml')
@@ -191,6 +193,7 @@ def waf_login():
     waf_url="https://"+waf_ip+":8443/restapi/v3.1/login"
     headers={"Content-Type": "application/json"}
     payload={"username":"admin","password":waf_login_passwd}
+    requests.packages.urllib3.disable_warnings()
     token_req_json=requests.post(waf_url, data=json.dumps(payload), headers=headers, verify=False)
     token_output=token_req_json.text
     token_split=token_output.split(":")
@@ -214,6 +217,7 @@ def waf_get_logs(ip,passwd,headers):
         try:
             if log_type_input == value:
                 log_url="https://"+ip+":8443"+"/restapi/v3.1/logs/"+key
+                requests.packages.urllib3.disable_warnings()
                 logs_request=requests.get(log_url,headers=headers,verify=False)
                 logs_output=json.dumps(logs_request.text, ensure_ascii=False, indent=3)
                 print(logs_output)
