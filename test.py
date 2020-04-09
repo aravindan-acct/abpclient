@@ -19,12 +19,23 @@ from statistics import mean
 
 def contents():
     print('''
-    
-    What test do you want to perform ? \n
-    1:  Execute a simple get request 10 times to a web application \n
-    2.  Crawl the site \n
-    3.  Find the input params of a web page form \n
-    4.  Tarpit Test
+         .----------------.  .----------------.  .----------------. 
+        | .--------------. || .--------------. || .--------------. |
+        | |      __      | || |   ______     | || |   ______     | |
+        | |     /  \     | || |  |_   _ \    | || |  |_   __ \   | |
+        | |    / /\ \    | || |    | |_) |   | || |    | |__) |  | |
+        | |   / ____ \   | || |    |  __'.   | || |    |  ___/   | |
+        | | _/ /    \ \_ | || |   _| |__) |  | || |   _| |_      | |
+        | ||____|  |____|| || |  |_______/   | || |  |_____|     | |
+        | |              | || |              | || |              | |
+        | '--------------' || '--------------' || '--------------' |
+        '----------------'  '----------------'  '----------------' 
+
+            What test do you want to perform ? \n
+            1:  Execute a simple get request 10 times to a web application \n
+            2.  Crawl the site \n
+            3.  Find the input params of a web page form \n
+            4.  Tarpit Test
 
     ''')
     try:
